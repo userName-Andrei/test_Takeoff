@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import ContactList from '../../components/ContactList';
 import FormContact from '../../components/FormContact';
 import Search from '../../components/Search';
@@ -10,6 +10,10 @@ import {
     Stack, 
     Typography 
 } from '@mui/material';
+import { useAppDispatch } from '../../hooks/useDispatch';
+import { useAppSelector } from '../../hooks/useSelector';
+import { useNavigate } from 'react-router-dom';
+import { fetchContactsByUserEmail } from '../../store/slices/contactsSlice';
 
 const data = [
     {
@@ -85,6 +89,16 @@ const data = [
 ]
 
 const Contacts = () => {
+
+    const dispatch = useAppDispatch();
+    const user = useAppSelector(state => state.auth.user);
+    const contacts = useAppSelector(state => state.contacts);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        user ? dispatch(fetchContactsByUserEmail(user.email)) : navigate('/')
+    }, [])
+
     return (
         <Container
             maxWidth='lg'
@@ -112,7 +126,7 @@ const Contacts = () => {
                         sm={7} 
                         md={8}
                     >
-                        <ContactList contacts={data} status={'loaded'} />
+                        <ContactList contacts={contacts.contacts} status={contacts.status} />
                     </Grid>
                     <Grid 
                         item
