@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios'
 import { ILoginForm, IUser } from '../../types/types'
 
 interface UserState {
-    user: IUser|null,
+    user: IUser | null,
     status: 'idle' | 'loading' | 'loaded' | 'error',
     errorMessage: string | undefined
 }
@@ -26,7 +26,9 @@ export const fetchLogin = createAsyncThunk<
         try {
             const user = await axios.post('http://localhost:3001/login', data);
 
-            return user.data
+            const result = {...user.data.user, token: user.data.accessToken};
+
+            return result
         } catch (error) {
             if (error instanceof AxiosError && error.response?.status === 400) {
                 return thunkAPI.rejectWithValue(error.response.data)
