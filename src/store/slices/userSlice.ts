@@ -2,14 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { ILoginForm, IUser } from '../../types/types'
 
-interface IError {
-    errorMessage: string
-}
-
 interface UserState {
     user: IUser|null,
     status: 'idle' | 'loading' | 'loaded' | 'error',
-    errorMessage: any
+    errorMessage: string | undefined
 }
 
 const initialState: UserState = {
@@ -22,7 +18,7 @@ export const fetchLogin = createAsyncThunk<
     IUser,
     ILoginForm,
     {
-        
+        rejectValue: string 
     }
 >(
     'user/fetchLogin',
@@ -32,8 +28,8 @@ export const fetchLogin = createAsyncThunk<
 
             return user.data
         } catch (error) {
-            if (error instanceof AxiosError) {
-                return thunkAPI.rejectWithValue(error.response?.data)
+            if (error instanceof AxiosError && error.response?.status === 400) {
+                return thunkAPI.rejectWithValue(error.response.data)
             }
         }
     }
