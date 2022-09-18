@@ -5,3 +5,15 @@ export interface IContact {
     "phone": string,
     "email"?: string
 }
+
+export interface IUser {
+    "id": number,
+    "name": string,
+    "email": string,
+    "token": string
+}
+
+export interface ILoginForm {
+    "email": string,
+    "password": string
+}

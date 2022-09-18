@@ -4,24 +4,27 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
+import Login from './pages/Login';
+import Contacts from './pages/Contacts';
+import { Provider } from 'react-redux';
+import store from './store';
 
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
 
-import Login from './pages/Login';
-import Contacts from './pages/Contacts';
-
 function App() {
   return (
-    <Router>
-      <ThemeProvider theme={theme}>
-        <Routes>
-          <Route path='/' element={<Login/>} />
-          <Route path='*' element={<Login/>} />
-          <Route path='/contacts' element={<Contacts/>} />
-        </Routes>
-      </ThemeProvider>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <Routes>
+            <Route path='/' element={<Login/>} />
+            <Route path='*' element={<Login/>} />
+            <Route path='/contacts' element={<Contacts/>} />
+          </Routes>
+        </ThemeProvider>
+      </Router>
+    </Provider>
   );
 }
 
