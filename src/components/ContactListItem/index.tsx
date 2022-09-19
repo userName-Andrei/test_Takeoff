@@ -15,6 +15,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import styles from './ContactListItem.module.scss'
 
 import { IContact } from '../../types/types';
+import { useAppDispatch } from '../../hooks/useDispatch';
+import { deleteContact } from '../../store/slices/contactsSlice';
 
 interface ContactListItemProps {
     contact?: IContact,
@@ -23,7 +25,12 @@ interface ContactListItemProps {
 
 const ContactListItem: FC<ContactListItemProps> = ({contact, status}) => {
 
+    const dispatch = useAppDispatch();
     const [edit, setEdit] = useState(false);
+
+    const onClick = () => {
+        if (typeof contact?.id === 'number') dispatch(deleteContact(contact.id))
+    }
 
     if (status === 'loading') return <ContactSkeleton />
     if (status === 'error') return <Typography variant="h5" component="div">Произошла ошибка</Typography>
@@ -42,7 +49,10 @@ const ContactListItem: FC<ContactListItemProps> = ({contact, status}) => {
                 >
                     <EditIcon />
                 </IconButton>
-                <IconButton color='error'>
+                <IconButton 
+                    color='error'
+                    onClick={onClick}
+                >
                     <ClearIcon />
                 </IconButton>
             </Box>

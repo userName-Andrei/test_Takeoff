@@ -14,6 +14,15 @@ const initialState: ContactsState = {
     errorMessage: ''
 }
 
+export const deleteContact = createAsyncThunk(
+    'contacts/deleteContact',
+    async (id: number) => {
+        await axios.delete(`http://localhost:3001/contacts/${id}`);
+
+        return id;
+    }
+)
+
 export const editContact = createAsyncThunk(
     'contacts/editContact',
     async (contact: {id: number | undefined, data: IContact}) => {
@@ -106,13 +115,12 @@ const contactsSlice = createSlice({
             .addCase(editContact.fulfilled, (state, action) => {
                 state.contacts = state.contacts!.map(item => {
                     if (item.id === action.payload.id) return action.payload
-                    
+
                     return item
                 });
             })
-            .addCase(editContact.rejected, (state) => {
-                state.contacts = [];
-                state.status = 'error';
+            .addCase(deleteContact.fulfilled, (state, action) => {
+                state.contacts = state.contacts!.filter(item => item.id !== action.payload);
             })
     },
 })
