@@ -46,7 +46,7 @@ const ContactListItem: FC<ContactListItemProps> = ({contact, status}) => {
                     <ClearIcon />
                 </IconButton>
             </Box>
-            {edit ? <FormContact contact={contact} edit /> : <Contact contact={contact} />}
+            {edit ? <FormContact contact={contact} /> : <Contact contact={contact} />}
         </Card>
     );
 };

@@ -1,6 +1,6 @@
 export interface IContact {
-    "id": number,
-    "ownerEmail": string,
+    "id"?: number,
+    "ownerEmail"?: string,
     "name": string,
     "phone": string,
     "email"?: string
@@ -16,4 +16,10 @@ export interface IUser {
 export interface ILoginForm {
     "email": string,
     "password": string
+}
+
+export interface IContactForm {
+    "name": string,
+    "phone": string,
+    "email"?: string
 }

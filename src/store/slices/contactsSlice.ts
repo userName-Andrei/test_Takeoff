@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { IContact } from '../../types/types'
-import type { RootState } from '../index'
 
 interface ContactsState {
     contacts: IContact[] | null,
@@ -15,8 +14,26 @@ const initialState: ContactsState = {
     errorMessage: ''
 }
 
+export const editContact = createAsyncThunk(
+    'contacts/editContact',
+    async (contact: {id: number | undefined, data: IContact}) => {
+        const res = await axios.patch(`http://localhost:3001/contacts/${contact.id}`, contact.data);
+
+        return res.data;
+    }
+)
+
+export const addNewContact = createAsyncThunk(
+    'contacts/addNewContact',
+    async (data: IContact) => {
+        const contact = await axios.post('http://localhost:3001/contacts', data);
+
+        return contact.data;
+    }
+)
+
 export const fetchContactsBySearch = createAsyncThunk(
-    'fetchContactsBySearch',
+    'contacts/fetchContactsBySearch',
     async (data: {email: string, phrase: string}) => {
         const {email, phrase} = data;
         const contactsByName = await axios.get(`http://localhost:3001/contacts?ownerEmail=${email}&name_like=${phrase}`);
@@ -36,7 +53,7 @@ export const fetchContactsByUserEmail = createAsyncThunk<
         rejectValue: string 
     }
 >(
-    'fetchContactsByUserEmail',
+    'contacts/fetchContactsByUserEmail',
     async (email, thunkAPI) => {
         try {
             const contacts = await axios.get(`http://localhost:3001/contacts?ownerEmail=${email}`);
@@ -76,6 +93,24 @@ const contactsSlice = createSlice({
                 state.status = 'loaded';
             })
             .addCase(fetchContactsBySearch.rejected, (state) => {
+                state.contacts = [];
+                state.status = 'error';
+            })
+            .addCase(addNewContact.fulfilled, (state, action) => {
+                state.contacts?.push(action.payload);
+            })
+            .addCase(addNewContact.rejected, (state) => {
+                state.contacts = [];
+                state.status = 'error';
+            })
+            .addCase(editContact.fulfilled, (state, action) => {
+                state.contacts = state.contacts!.map(item => {
+                    if (item.id === action.payload.id) return action.payload
+                    
+                    return item
+                });
+            })
+            .addCase(editContact.rejected, (state) => {
                 state.contacts = [];
                 state.status = 'error';
             })
