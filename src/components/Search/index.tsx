@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, memo, useEffect, useState } from 'react';
 import { IconButton, InputBase, Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useAppDispatch } from '../../hooks/useDispatch';
@@ -9,7 +9,6 @@ const Search = () => {
 
     const dispatch = useAppDispatch();
     const user = useAppSelector(state => state.auth.user);
-    const contacts = useAppSelector(state => state.contacts.contacts);
     const [value, setValue] = useState<string>('');
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -34,4 +33,4 @@ const Search = () => {
     );
 };
 
-export default Search;
+export default memo(Search);

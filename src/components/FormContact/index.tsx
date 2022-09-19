@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
@@ -26,19 +26,19 @@ const FormContact: FC<FormContactProps> = ({contact}) => {
     const contacts = useAppSelector(state => state.contacts);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const onSubmitAdd = (data: IContactForm) => {
+    const onSubmitAdd = useCallback((data: IContactForm) => {
         const result = {...data, ownerEmail: user!.email};
 
         setLoading(true);
         dispatch(addNewContact(result))
-    }
+    }, [])
 
-    const onSubmitEdit = (data: IContactForm) => {
+    const onSubmitEdit = useCallback((data: IContactForm) => {
         const result = {data, id: contact!.id};
 
         setLoading(true);
         dispatch(editContact(result))
-    }
+    },[])
 
     useEffect(() => {
         setLoading(false)
