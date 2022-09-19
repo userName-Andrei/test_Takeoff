@@ -7,10 +7,10 @@
 Приложение запустится автоматически в браузере.
 
 #### Для входа в контакты зарегистрировано 2 пользователя
-1. email - anton@gmail.com
+1. email - anton@gmail.com  
    password - 12345
 
-2. email - ivan@gmail.com
+2. email - ivan@gmail.com  
    password - 54321
 
 ##### Приложение поддерживает функции:
