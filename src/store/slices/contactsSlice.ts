@@ -45,9 +45,9 @@ export const fetchContactsBySearch = createAsyncThunk(
     'contacts/fetchContactsBySearch',
     async (data: {email: string, phrase: string}) => {
         const {email, phrase} = data;
-        const contactsByName = await axios.get(`http://localhost:3001/contacts?ownerEmail=${email}&name_like=${phrase}`);
+        const contactsByName = await axios.get(`http://localhost:3001/contacts?ownerEmail=${email}&name_like=${phrase}&_sort=name&_order=asc`);
 
-        const contactsByPhone = await axios.get(`http://localhost:3001/contacts?ownerEmail=${email}&phone_like=${phrase}`);
+        const contactsByPhone = await axios.get(`http://localhost:3001/contacts?ownerEmail=${email}&phone_like=${phrase}&_sort=name&_order=asc`);
 
         if (contactsByPhone.data.length > 0) return contactsByPhone.data;
 
@@ -65,7 +65,7 @@ export const fetchContactsByUserEmail = createAsyncThunk<
     'contacts/fetchContactsByUserEmail',
     async (email, thunkAPI) => {
         try {
-            const contacts = await axios.get(`http://localhost:3001/contacts?ownerEmail=${email}`);
+            const contacts = await axios.get(`http://localhost:3001/contacts?ownerEmail=${email}&_sort=name&_order=asc`);
 
             return contacts.data
         } catch (error) {
